@@ -2,11 +2,11 @@ package main
 
 import (
 	"dumbflix/database"
-	// "dumbflix/handlers"
 	"dumbflix/pkg/mysql"
 	"dumbflix/routes"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -28,12 +28,13 @@ func main() {
 
 	routes.RouteInit(r.PathPrefix("/api/v1").Subrouter())
 
+	r.PathPrefix("/uploads").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // add this code
+
 	var AllowedHeaders = handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	var AllowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS", "PATCH", "DELETE"})
 	var AllowedOrigins = handlers.AllowedOrigins([]string{"*"})
 
-	r.PathPrefix("/uploads").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // add this code
-
-	fmt.Println("server running localhost:5000")
-	http.ListenAndServe("localhost:5000", handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
+	var port = os.Getenv("PORT")
+	fmt.Println("server running localhost:" + port)
+	http.ListenAndServe(":"+port, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
 }
