@@ -220,7 +220,7 @@ func convertResponseFilm(u models.Film) filmsdto.FilmResponse {
 	return filmsdto.FilmResponse{
 		ID:         u.ID,
 		Title:      u.Title,
-		Thumbnail:  os.Getenv("PATH_FILE") + u.ThumbnailFilm,
+		Thumbnail:  u.ThumbnailFilm,
 		Category:   u.Category,
 		CategoryID: u.CategoryID,
 		Year:       u.Year,
