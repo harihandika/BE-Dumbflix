@@ -14,4 +14,5 @@ type UpdateFilmRequest struct {
 	Thumbnail string `json:"thumbnail" form:"thumbnail"`
 	Year      string `json:"year" form:"year"`
 	Desc      string `json:"desc" form:"desc"`
+	LinkFilm  string `json:"link"`
 }

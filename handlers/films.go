@@ -139,6 +139,7 @@ func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
 		Year:      r.FormValue("year"),
 		Desc:      r.FormValue("desc"),
 		Thumbnail: filename,
+		LinkFilm:  r.FormValue("link"),
 	}
 	// request := new(filmsdto.UpdateFilmRequest)
 	// if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
@@ -171,6 +172,10 @@ func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
 
 	if request.Desc != "" {
 		film.Desc = request.Desc
+	}
+
+	if request.LinkFilm != "" {
+		film.LinkFilm = request.LinkFilm
 	}
 
 	data, err := h.FilmRepository.UpdateFilm(film)
