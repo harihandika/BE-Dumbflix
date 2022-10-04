@@ -132,13 +132,28 @@ func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	dataContex := r.Context().Value("dataFile")
-	filename := dataContex.(string)
+	filepath := dataContex.(string)
+
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+
+	// Add your Cloudinary credentials ...
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+
+	// Upload file to Cloudinary ...
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "dumbflix"})
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	request := filmsdto.UpdateFilmRequest{
 		Title:     r.FormValue("title"),
 		Year:      r.FormValue("year"),
 		Desc:      r.FormValue("desc"),
-		Thumbnail: filename,
+		Thumbnail: resp.SecureURL,
 		LinkFilm:  r.FormValue("link"),
 	}
 	// request := new(filmsdto.UpdateFilmRequest)
