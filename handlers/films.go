@@ -233,9 +233,9 @@ func (h *handlerFilm) DeleteFilm(w http.ResponseWriter, r *http.Request) {
 
 func convertResponseFilm(u models.Film) filmsdto.FilmResponse {
 	return filmsdto.FilmResponse{
-		ID:         u.ID,
-		Title:      u.Title,
-		Thumbnail:  u.ThumbnailFilm,
+		ID:    u.ID,
+		Title: u.Title,
+		// Thumbnail:  u.ThumbnailFilm,
 		Category:   u.Category,
 		CategoryID: u.CategoryID,
 		Year:       u.Year,
