@@ -73,11 +73,12 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
 
 	request := filmsdto.CreateFilmRequest{
-		Title:      r.FormValue("title"),
-		Year:       r.FormValue("year"),
-		CategoryID: category_id,
-		Desc:       r.FormValue("desc"),
-		LinkFilm:   r.FormValue("link"),
+		Title:         r.FormValue("title"),
+		Year:          r.FormValue("year"),
+		ThumbnailFilm: filepath,
+		CategoryID:    category_id,
+		Desc:          r.FormValue("desc"),
+		LinkFilm:      r.FormValue("link"),
 	}
 
 	validation := validator.New()
