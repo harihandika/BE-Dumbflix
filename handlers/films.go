@@ -76,6 +76,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		Title:      r.FormValue("title"),
 		Year:       r.FormValue("year"),
 		CategoryID: category_id,
+		Thumbnail:  filepath,
 		Desc:       r.FormValue("desc"),
 		LinkFilm:   r.FormValue("link"),
 	}
