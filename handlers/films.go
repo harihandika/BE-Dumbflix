@@ -67,8 +67,8 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	userId := int(userInfo["id"].(float64))
 
 	fmt.Println(userId)
-	// dataContex := r.Context().Value("dataFile")
-	// filepath := dataContex.(string)
+	dataContex := r.Context().Value("dataFile")
+	filepath := dataContex.(string)
 
 	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
 
@@ -89,28 +89,28 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// var ctx = context.Background()
-	// var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-	// var API_KEY = os.Getenv("API_KEY")
-	// var API_SECRET = os.Getenv("API_SECRET")
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
 
 	// Add your Cloudinary credentials ...
-	// cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
 
 	// Upload file to Cloudinary ...
-	// resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "dumbflix"})
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "dumbflix"})
 
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
 	film := models.Film{
-		Title: request.Title,
-		// ThumbnailFilm: resp.SecureURL,
-		Year:       request.Year,
-		CategoryID: request.CategoryID,
-		Desc:       request.Desc,
-		LinkFilm:   request.LinkFilm,
+		Title:         request.Title,
+		ThumbnailFilm: resp.SecureURL,
+		Year:          request.Year,
+		CategoryID:    request.CategoryID,
+		Desc:          request.Desc,
+		LinkFilm:      request.LinkFilm,
 	}
 
 	data, err := h.FilmRepository.CreateFilm(film)
@@ -233,9 +233,9 @@ func (h *handlerFilm) DeleteFilm(w http.ResponseWriter, r *http.Request) {
 
 func convertResponseFilm(u models.Film) filmsdto.FilmResponse {
 	return filmsdto.FilmResponse{
-		ID:    u.ID,
-		Title: u.Title,
-		// Thumbnail:  u.ThumbnailFilm,
+		ID:         u.ID,
+		Title:      u.Title,
+		Thumbnail:  u.ThumbnailFilm,
 		Category:   u.Category,
 		CategoryID: u.CategoryID,
 		Year:       u.Year,
