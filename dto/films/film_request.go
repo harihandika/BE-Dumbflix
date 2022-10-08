@@ -1,12 +1,12 @@
 package filmsdto
 
 type CreateFilmRequest struct {
-	Title         string `json:"title" form:"title" validate:"required"`
-	ThumbnailFilm string `json:"image" gorm:"type: varchar(255)"`
-	Year          string `json:"year" form:"year" validate:"required"`
-	CategoryID    int    `json:"category_id" form:"category_id" gorm:"type: int"`
-	Desc          string `json:"desc" form:"desc" validate:"required"`
-	LinkFilm      string `json:"link"`
+	Title      string `json:"title" form:"title" validate:"required"`
+	Thumbnail  string `json:"thumbnail" form:"thumbnail"`
+	Year       string `json:"year" form:"year" validate:"required"`
+	CategoryID int    `json:"category_id" form:"category_id" gorm:"type: int"`
+	Desc       string `json:"desc" form:"desc" validate:"required"`
+	LinkFilm   string `json:"link"`
 }
 
 type UpdateFilmRequest struct {

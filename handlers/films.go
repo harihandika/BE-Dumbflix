@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 
@@ -71,6 +72,23 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 
 	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
 
+	request := filmsdto.CreateFilmRequest{
+		Title:      r.FormValue("title"),
+		Year:       r.FormValue("year"),
+		CategoryID: category_id,
+		Desc:       r.FormValue("desc"),
+		LinkFilm:   r.FormValue("link"),
+	}
+
+	validation := validator.New()
+	err := validation.Struct(request)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
 	var ctx = context.Background()
 	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
 	var API_KEY = os.Getenv("API_KEY")
@@ -85,24 +103,6 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-
-	request := filmsdto.CreateFilmRequest{
-		Title:         r.FormValue("title"),
-		Year:          r.FormValue("year"),
-		ThumbnailFilm: resp.SecureURL,
-		CategoryID:    category_id,
-		Desc:          r.FormValue("desc"),
-		LinkFilm:      r.FormValue("link"),
-	}
-
-	// validation := validator.New()
-	// err := validation.Struct(request)
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-	// 	json.NewEncoder(w).Encode(response)
-	// 	return
-	// }
 
 	film := models.Film{
 		Title:         request.Title,
